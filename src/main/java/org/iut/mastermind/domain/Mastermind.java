@@ -21,12 +21,10 @@ public class Mastermind {
     }
 
     public boolean nouvellePartie(Joueur joueur) {
-        Optional<Partie> partieEnCours = partieRepository.getPartieEnregistree(joueur);
-        if (isJeuEnCours(partieEnCours)) {
+        if (isJeuEnCours(partieRepository.getPartieEnregistree(joueur))) {
             return false;
         }
-        String motADeviner = serviceTirageMot.tirageMotAleatoire();
-        Partie nouvellePartie = Partie.create(joueur, motADeviner);
+        Partie nouvellePartie = Partie.create(joueur, serviceTirageMot.tirageMotAleatoire());
         partieRepository.create(nouvellePartie);
         return true;
     }
@@ -36,8 +34,7 @@ public class Mastermind {
         if (!isJeuEnCours(partieEnCours)) {
             return ResultatPartie.ERROR;
         }
-        Partie partie = partieEnCours.get();
-        return calculeResultat(partie, motPropose);
+        return calculeResultat(partieEnCours.get(), motPropose);
     }
 
     private ResultatPartie calculeResultat(Partie partie, String motPropose) {

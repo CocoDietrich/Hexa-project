@@ -6,27 +6,24 @@ import static java.util.Collections.unmodifiableList;
 
 public class Reponse {
     private final String motSecret;
-    private final List<Lettre> resultat = new ArrayList<>();
+    private final List<Lettre> resultat;
     private int position;
 
     public Reponse(String mot) {
         this.motSecret = mot;
+        this.resultat = new ArrayList<>();
     }
 
-    // on récupère la lettre à la position dans le résultat
     public Lettre lettre(int position) {
         return resultat.get(position);
     }
 
-    // on construit le résultat en analysant chaque lettre
-    // du mot proposé
     public void compare(String essai) {
         for (int i = 0; i < essai.length(); i++) {
             resultat.add(evaluationCaractere(essai.charAt(i)));
         }
     }
 
-    // si toutes les lettres sont placées
     public boolean lettresToutesPlacees() {
         return resultat.stream().allMatch(lettre -> lettre == Lettre.PLACEE);
     }
@@ -35,7 +32,6 @@ public class Reponse {
         return unmodifiableList(resultat);
     }
 
-    // renvoie le statut du caractère
     private Lettre evaluationCaractere(char carCourant) {
         if (estPlace(carCourant)) {
             return Lettre.PLACEE;
@@ -46,12 +42,10 @@ public class Reponse {
         }
     }
 
-    // le caractère est présent dans le mot secret
     private boolean estPresent(char carCourant) {
         return motSecret.indexOf(carCourant) >= 0;
     }
 
-    // le caractère est placé dans le mot secret
     private boolean estPlace(char carCourant) {
         return motSecret.charAt(position++) == carCourant;
     }
